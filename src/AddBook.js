@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Picker, Text, TextInput, View, TouchableOpacity } from 'react-native'
+import {Text, TextInput, View, TouchableOpacity } from 'react-native'
 import { addBookMutation, getAuthorsQuery,ListingsQuery } from './queries/queries'
 import {flowRight as compose} from 'lodash'
 import { graphql } from 'react-apollo'
+import {Picker} from '@react-native-picker/picker'
 
 
 
@@ -17,22 +18,22 @@ class AddBook extends Component {
             auhtorId:""
         }
     }
-    displayAuthors(){
-        var data = this.props.getAuthorsQuery
-        if(data.loading){
-          return(
-            <Text>Loading Authors...</Text>
-          )
-        }
-        else
-        {
-          return data.authors.map(author => {
-            return(
-              <Picker.Item value={author.id} key={author.id} label={author.name} />
-            )
-          })
-        }
-      }
+    // displayAuthors(){
+    //     var data = this.props.getAuthorsQuery
+    //     if(data.loading){
+    //       return(
+    //         <Text>Loading Authors...</Text>
+    //       )
+    //     }
+    //     else
+    //     {
+    //       return data.authors.map(author => {
+    //         return(
+    //           <Picker.Item value={author.id} key={author.id} label={author.name} />
+    //         )
+    //       })
+    //     }
+    //   }
 
       submitData(){
         //   const {name,genre,auhtorId} = this.state
@@ -48,6 +49,8 @@ class AddBook extends Component {
         })
       }
     render() {
+        const data = this.props
+        console.log(data);
         return (
             <View style={{flex:1}}>
                 <TextInput
@@ -62,7 +65,7 @@ class AddBook extends Component {
                 />
                 <Picker onValueChange={itemValue => this.setState({auhtorId:itemValue})}>
                     <Picker.Item label="SELECT AUTHOR"/>
-                    {this.displayAuthors()}
+                    {/* {this.displayAuthors()} */}
                 </Picker>
                 <TouchableOpacity 
                     style={{
@@ -82,8 +85,6 @@ class AddBook extends Component {
         )
     }
 }
+// graphql(addBookMutation,{name:"addBookMutation"})
 
-export default compose(
-    graphql(getAuthorsQuery,{name:"getAuthorsQuery"}),
-    graphql(addBookMutation,{name:"addBookMutation"})
-)(AddBook)
+export default graphql(getAuthorsQuery)(AddBook)
